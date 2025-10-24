@@ -1,27 +1,38 @@
 # demo_bug.py
 def calculate_average(scores):
     """
-    Calculates the average of a list of scores.
-    BUG: Raises ZeroDivisionError if all scores are zero or list is empty,
-         and silently ignores negative scores (which should be invalid).
+    Calculates the average of a list of non-negative scores.
+
+    Args:
+        scores (list): A list of numeric scores.
+
+    Returns:
+        float: The average score.
+
+    Raises:
+        ValueError: If the input list is empty or all scores are invalid.
     """
-    total = 0
-    count = 0
-    for s in scores:
-        if s >= 0:
-            total += s
-            count += 1
-        # BUG: negative scores are ignored, but maybe they shouldn't be
-    
-    return total / count  # BUG: division by zero if no valid scores
+    if not scores:
+        raise ValueError("Input list is empty")
+
+    valid_scores = [s for s in scores if s >= 0]
+    if not valid_scores:
+        raise ValueError("All scores are invalid")
+
+    total = sum(valid_scores)
+    count = len(valid_scores)
+
+    return total / count
 
 
 def main():
-    student_scores = [0, 0, -5, -10]  # Edge-case triggers bug
-    avg = calculate_average(student_scores)
-    print(f"Average score: {avg}")
+    try:
+        student_scores = [0, 0, -5, -10]  
+        avg = calculate_average(student_scores)
+        print(f"Average score: {avg}")
+    except ValueError as e:
+        print(f"Error: {e}")
 
 
 if __name__ == "__main__":
     main()
-
